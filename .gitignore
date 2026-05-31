@@ -1,8 +1,8 @@
 build/
+Debug/
+Release/
 .vs/
-.vscode/.cache/
-*.exe
+*.user
 *.pdb
 *.ilk
 *.obj
-*.asm

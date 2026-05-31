@@ -1,3 +1,4 @@
+#define SDL_MAIN_HANDLED
 #include "SDL2/SDL.h"
 #include "common.h"
 #include "draw.h"

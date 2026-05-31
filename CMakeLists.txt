@@ -14,15 +14,24 @@ else()
     add_compile_options(-Wall -Wempty-body -Werror -Wstrict-prototypes -Werror=maybe-uninitialized -Warray-bounds -g)
 endif()
 
-file(GLOB SOURCES
-    *.c
-    *.h
+file(GLOB_RECURSE SOURCES
+    src/*.c
+    src/*.h
 )
+
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY C_STANDARD 11)
+
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/render
+)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
     SDL2::SDL2
