@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Template",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/Debug/Template.exe",
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "preLaunchTask": "CMake Build Debug"
+    }
+  ]
+}

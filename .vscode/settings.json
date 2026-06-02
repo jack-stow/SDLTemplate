@@ -1,3 +1,6 @@
 {
-  "cmake.configurePreset": "vs2022-x64-vcpkg"
+  "cmake.configurePreset": "vs2022-x64-vcpkg",
+  "cmake.debugConfig": {
+    "cwd": "${workspaceFolder}"
+  }
 }
