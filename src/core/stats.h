@@ -1,8 +1,9 @@
 #pragma once
 #include <stdbool.h>
-#include <SDL2/SDL_stdinc.h>
 #include <float.h>
+#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_video.h>
+#include <SDL2/SDL_timer.h>
 
 #define STAT_LIST(X) \
     X(FPS,          "FPS",          "FPS",     true) \

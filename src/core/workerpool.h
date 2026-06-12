@@ -1,0 +1,32 @@
+#pragma once
+#include <SDL2/SDL_mutex.h>
+#include <SDL2/SDL_thread.h>
+
+typedef void (*WorkerJobFunc)(void* jobData, int start, int end, int threadIndex);
+
+typedef struct
+{
+    SDL_mutex* mutex;
+    SDL_cond* startCond;
+    SDL_cond* doneCond;
+    SDL_mutex* chunkMutex;
+
+    int quit;
+    int generation;
+    int completed;
+    int numThreads;
+    int activeThreads;
+
+    int nextChunkStart;
+    int chunkSize;
+    int itemCount;
+
+    WorkerJobFunc jobFunc;
+    void* jobData;
+} WorkerPool;
+
+WorkerPool workerPool;
+
+int PersistentWorkerMainBalanced(void* data);
+
+void WorkerPool_Run(WorkerPool* pool, int itemCount, int chunkSize, int activeThreads, WorkerJobFunc jobFunc, void* jobData);

@@ -6,12 +6,10 @@
 #include "platform/input.h"
 #include "main.h"
 #include "core/stats.h"
+#include "core/workerpool.h"
 
 App    app;
 Stats stats;
-
-
-
 
 int main(int argc, char* argv[])
 {
@@ -35,6 +33,45 @@ int main(int argc, char* argv[])
 	Stats_Init(&titleStats);
 
 	FrameProfiler profiler = { 0 };
+
+	// threads init
+	int numThreads = SDL_GetCPUCount();
+	int countThreads = 3;
+	SDL_Thread** threads = malloc(sizeof(SDL_Thread*) * numThreads);
+	char (*threadNames)[32] = malloc(sizeof(*threadNames) * numThreads);
+
+	for (int i = 0; i < numThreads; i++)
+	{
+		snprintf(threadNames[i], sizeof(threadNames[i]), "BoidWorker %d", i);
+	}
+
+
+	// init workerPool
+	workerPool.numThreads = numThreads;
+	workerPool.quit = 0;
+	workerPool.generation = 0;
+	workerPool.completed = 0;
+	workerPool.mutex = SDL_CreateMutex();
+	workerPool.chunkMutex = SDL_CreateMutex();
+	workerPool.startCond = SDL_CreateCond();
+	workerPool.doneCond = SDL_CreateCond();
+
+	int* threadIds = malloc(sizeof(int) * numThreads);
+	if (threadIds == NULL)
+	{
+		SDL_Log("Failed to allocate threadIds");
+		exit(1);
+	}
+
+	for (int i = 0; i < numThreads; i++)
+	{
+		threadIds[i] = i;
+		threads[i] = SDL_CreateThread(
+			PersistentWorkerMainBalanced,
+			threadNames[i],
+			&threadIds[i]
+		);
+	}
 	
 	while (1)
 	{
@@ -53,7 +90,7 @@ int main(int argc, char* argv[])
 		// UPDATE LOGIC HERE
 		Profiler_End(&profiler, &stats, &titleStats, STAT_UPDATE);
 
-		
+
 		Profiler_Begin(&profiler, STAT_DRAW);
 		// DRAW LOGIC HERE
 		Profiler_End(&profiler, &stats, &titleStats, STAT_DRAW);
