@@ -7,6 +7,7 @@
 
 #define FRAME_RATE 60.0
 
+#define BENCHMARK_FRAMES 1000
 #define WARMUP_FRAMES 60
 
 #define RNG_SEED 12345
